@@ -9,6 +9,7 @@ import { User } from './auth/entities/user.entity';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [PostModule,
@@ -20,6 +21,9 @@ import { CacheModule } from '@nestjs/cache-manager';
           limit: 10,
         }
       ]
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     // In-memory caching
     CacheModule.register({
