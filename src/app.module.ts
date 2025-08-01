@@ -12,6 +12,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [PostModule,
+    // Rate limiting setup - max 10 requests per 60 seconds
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -20,21 +21,24 @@ import { CacheModule } from '@nestjs/cache-manager';
         }
       ]
     }),
+    // In-memory caching
     CacheModule.register({
       isGlobal: true,
       ttl: 30000,
       max: 100,
     }),
+    // PostgreSQL connection using TypeORM        
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
       username: 'postgres',
       password: 'Adrian111!!!',
-      database: 'sm_nestjs_db',
-      entities: [Post, User],
+      database: 'sm_nestjs_db', 
+      entities: [Post, User], // Entities to be registered with the DB
       synchronize: true
-    }), AuthModule],
+    }), AuthModule // Handles login, registration, and user management
+],
   controllers: [AppController],
   providers: [AppService],
 })
