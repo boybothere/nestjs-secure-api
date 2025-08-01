@@ -33,9 +33,15 @@ import { CacheModule } from '@nestjs/cache-manager';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
+<<<<<<< HEAD
       password: 'Adrian111!!!',
       database: 'sm_nestjs_db', 
       entities: [Post, User], // Entities to be registered with the DB
+=======
+      password: 'process.env.DB_PASSWORD',
+      database: 'sm_nestjs_db',
+      entities: [Post, User],
+>>>>>>> be32f97 (Secure DB credentials via .env file)
       synchronize: true
     }), AuthModule // Handles login, registration, and user management
 ],
