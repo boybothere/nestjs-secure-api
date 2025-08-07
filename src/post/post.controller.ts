@@ -22,6 +22,11 @@ export class PostController {
     }
 
     @UseGuards(JwtAuthGuard)
+    findAll(): Promise<POST[]> {
+        return this.postService.findAll()
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Post('')
     @HttpCode(HttpStatus.CREATED)
     async create(@Body() createPostData: CreatePostDto, @CurrentUser() user: User): Promise<POST> {
