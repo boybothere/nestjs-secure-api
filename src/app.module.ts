@@ -6,10 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './post/entities/post.entity';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
-import { CacheModule } from '@nestjs/cache-manager';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [PostModule,
@@ -25,12 +24,6 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // In-memory caching
-    CacheModule.register({
-      isGlobal: true,
-      ttl: 30000,
-      max: 100,
-    }),
     // PostgreSQL connection using TypeORM        
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -41,7 +34,7 @@ import { ConfigModule } from '@nestjs/config';
       database: 'sm_nestjs_db',
       entities: [Post, User],
       synchronize: true
-    }), AuthModule // Handles login, registration, and user management
+    }), AuthModule, EventsModule // Handles login, registration, and user management
   ],
   controllers: [AppController],
   providers: [AppService],

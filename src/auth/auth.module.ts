@@ -8,11 +8,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]),
     PassportModule,
-  JwtModule.register({})],
+  JwtModule.register({}),
+    EventsModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, RolesGuard, JwtAuthGuard],
   exports: [AuthService, RolesGuard]
