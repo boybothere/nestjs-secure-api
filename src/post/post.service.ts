@@ -1,17 +1,22 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { User, UserRole } from 'src/auth/entities/user.entity';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class PostService {
-    constructor(@InjectRepository(Post) private postRepository: Repository<Post>) { }
+    constructor(@InjectRepository(Post) private postRepository: Repository<Post>
+    ) { }
 
 
+    async findAll() {
+        return await this.postRepository.find({
+            relations: ['authorName']
+        })
+    }
     async findOne(id: number): Promise<Post> {
         const post = await this.postRepository.findOne({
             where: { id },
