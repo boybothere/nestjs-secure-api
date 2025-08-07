@@ -11,11 +11,6 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 export class PostService {
     constructor(@InjectRepository(Post) private postRepository: Repository<Post>) { }
 
-    async findAll(): Promise<Post[]> {
-        return await this.postRepository.find({
-            relations: ['authorName']
-        })
-    }
 
     async findOne(id: number): Promise<Post> {
         const post = await this.postRepository.findOne({

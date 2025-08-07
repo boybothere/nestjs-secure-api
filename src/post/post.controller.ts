@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Delete, UseGuards, Patch } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Delete, UseGuards, Patch } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -14,11 +14,8 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class PostController {
     constructor(private readonly postService: PostService) { }
 
-    @Get()
-    async findAll(): Promise<POST[]> {
-        return await this.postService.findAll()
-    }
-
+    @UseGuards(JwtAuthGuard)
+    @Roles(UserRole.ADMIN)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe, PostExistsPipe) id: number): Promise<POST> {
         return await this.postService.findOne(id)
@@ -35,11 +32,10 @@ export class PostController {
 
     @UseGuards(JwtAuthGuard)
     @Patch(':id')
-    async update(@Param('id', ParseIntPipe, PostExistsPipe) id: number,
+    async update(@Param('id', ParseIntPipe, PostExistsPipe) postId: number,
         @Body() updateDetails: UpdatePostDto,
         @CurrentUser() user: any): Promise<POST> {
-        console.log('Current User:', user);
-        return await this.postService.update(id, updateDetails, user)
+        return await this.postService.update(postId, updateDetails, user)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
