@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -9,6 +9,8 @@ import { Roles } from './decorators/roles.decorators';
 import { RolesGuard } from './guards/roles.guard';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { LoginThrottleGuard } from './guards/login-throttle.guard';
+import { use } from 'passport';
+import { LoggingInterceptor } from 'src/common/interceptors/logging.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +23,7 @@ export class AuthController {
 
 
     @UseGuards(LoginThrottleGuard)
+    @UseInterceptors(LoggingInterceptor)
     @Post('login')
     login(@Body() loginDto: LoginDto) {
         return this.authService.loginUser(loginDto)
