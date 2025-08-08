@@ -9,7 +9,7 @@ export class UserRegisteredListener {
     @OnEvent('user.registered')
     handleUserRegisteredEvent(event: UserRegisteredEventInterface) {
         this.logger.log(`Account with user email ${event.user.email}
-            created at ${event.timestamp.toISOString}`)
+            created at ${event.timestamp.toISOString()}`)
 
     }
 }
